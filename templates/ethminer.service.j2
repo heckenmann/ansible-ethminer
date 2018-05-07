@@ -1,0 +1,13 @@
+[Unit]
+Description=ethminer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/ethminer -U -P {{ ethereum_pool_url }}
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

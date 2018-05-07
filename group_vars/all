@@ -1,0 +1,14 @@
+---
+cuda: https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda-repo-ubuntu1604-9-1-local_9.1.85-1_amd64
+cuda_patches:
+    - https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/1/cuda-repo-ubuntu1604-9-1-local-cublas-performance-update-1_1.0-1_amd64
+    - https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/2/cuda-repo-ubuntu1604-9-1-local-compiler-update-1_1.0-1_amd64
+    - https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/3/cuda-repo-ubuntu1604-9-1-local-cublas-performance-update-3_1.0-1_amd64
+cuda_version: 9-1
+cuda_apt_key_path: /var/cuda-repo-9-1-local/7fa2af80.pub
+
+ethermine_repo: /home/ubuntu/ethminer
+
+
+# Paste your URL here
+ethereum_pool_url: stratum+ssl://0x012345678901234567890234567890123@ethermine.org:5555

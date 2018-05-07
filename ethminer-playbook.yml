@@ -1,0 +1,69 @@
+---
+- name: "install cuda"
+  hosts: ethereum-miner
+  become: yes
+  tags:
+    - cuda
+  tasks:
+    - name: install deb
+      apt:
+        deb: "{{ cuda }}"
+        state: present
+    - name: install cuda key
+      apt_key:
+        file: "{{cuda_apt_key_path}}"
+        state: present
+    - name: Install cuda packages
+      apt:
+        update_cache: yes
+        name: ["cuda", "cuda-libraries-{{cuda_version}}"]
+        state: present
+    - name: install cuda patch {{ item }}
+      apt:
+        deb: "{{ item }}"
+        state: present
+      loop: "{{ cuda_patches }}"
+
+
+- name: "install ethminer"
+  hosts: ethereum-miner
+  become: yes
+  tags:
+    - ethereum
+  tasks:
+    - name: Add repository
+      apt_repository:
+        repo: ppa:ethereum/ethereum
+        state: present
+    - name: Install software
+      apt:
+        update_cache: yes
+        name: [software-properties-common, build-essential, geth, git, cmake]
+        state: present
+    - name: clone ethminer git repository
+      git:
+        repo: https://github.com/ethereum-mining/ethminer.git
+        dest: "{{ ethermine_repo }}"
+        update: yes
+        recursive: yes
+        clone: yes
+    - name: create build directory
+      file:
+        path: "{{ ethermine_repo }}/build"
+        state: directory
+    - name: cmake build
+      shell: "cd {{ ethermine_repo }}/build && cmake .. -DETHASHCUDA=ON -DETHASHCL=ON && cmake --build . && make install"
+    - name: Install ethminer as daemon
+      tags:
+        - service
+      template:
+        src: templates/ethminer.service.j2
+        dest: /lib/systemd/system/ethminer.service
+    - name: enable ethminer service
+      tags:
+        - service
+      systemd:
+        name: ethminer
+        daemon_reload: yes
+        enabled: yes
+        state: restarted
