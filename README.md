@@ -18,7 +18,11 @@ But you can modify this script to run the miner on your own machines.
 2. Your public ssh-Key has to be added to the host, to connect without Username and Passwort (default for EC2). (hint: ssh-keygen; ssh-copy-id)
 3. Paste the Public IP of the host in file "hosts".
 4. Change the Ethereum-Pool-URL in "group_vars/all".
-5. Execute:
+5. Install python on the HOST:
+```
+sudo apt install python-minimal
+```
+6. Execute:
 ```
 ansible-playbook ethminer-playbook.yml -i hosts
 ```
